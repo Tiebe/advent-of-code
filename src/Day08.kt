@@ -1,63 +1,70 @@
+@file:Suppress("DuplicatedCode")
+
 fun main() {
     fun List<String>.toMatrix(): Array<IntArray> = this.map { line -> line.map { it.digitToInt() }.toIntArray() }.toTypedArray()
 
-    fun Array<IntArray>.getTopVisibility(x: Int, y: Int): Int {
+    fun Array<IntArray>.getTopVisibility(x: Int, y: Int): Pair<Boolean, Int> {
         val pointValue = this[y][x]
 
         for (i in y-1 downTo 0) {
             if (this[i][x] >= pointValue) {
-                return y-i-1
+                return false to y-i-1
             }
         }
 
-        return y
+        return true to y
     }
 
-    fun Array<IntArray>.getBottomVisibility(x: Int, y: Int): Int {
+    fun Array<IntArray>.getBottomVisibility(x: Int, y: Int): Pair<Boolean, Int> {
         val pointValue = this[y][x]
 
         for (i in y+1 until size) {
             if (this[i][x] >= pointValue) {
-                return i-y
+                return false to i-y
             }
         }
 
-        return size-y-1
+        return true to size-y-1
     }
 
-    fun Array<IntArray>.getLeftVisibility(x: Int, y: Int): Int {
+    fun Array<IntArray>.getLeftVisibility(x: Int, y: Int): Pair<Boolean, Int> {
         val pointValue = this[y][x]
 
         for (i in x-1 downTo 0) {
             if (this[y][i] >= pointValue) {
-                return x-i
+                return false to x-i
             }
         }
 
-        return x
+        return true to x
     }
 
-    fun Array<IntArray>.getRightVisibility(x: Int, y: Int): Int {
+    fun Array<IntArray>.getRightVisibility(x: Int, y: Int): Pair<Boolean, Int> {
         val pointValue = this[y][x]
 
         for (i in x+1 until size) {
             if (this[y][i] >= pointValue) {
-                return i-x
+                return false to i-x
             }
         }
 
-        return size-x-1
+        return true to size-x-1
     }
 
     fun part1(input: List<String>): Int {
         val matrix = input.toMatrix()
+        var visible = matrix.size*4-4
 
-        matrix.forEach { it.forEach(::print); println() }
-
-        matrix.getRightVisibility(1, 0).println()
-        matrix.getRightVisibility(1, 2).println()
-
-        return 0
+        for (line in 1 until matrix.size-1) {
+            for (tree in 1 until matrix.size-1) {
+                if (matrix.getLeftVisibility(tree, line).first ||
+                    matrix.getRightVisibility(tree, line).first ||
+                    matrix.getTopVisibility(tree, line).first ||
+                    matrix.getBottomVisibility(tree, line).first)
+                    visible++
+            }
+        }
+        return visible
     }
 
     fun part2(input: List<String>): Int {
