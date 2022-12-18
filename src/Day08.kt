@@ -8,7 +8,7 @@ fun main() {
 
         for (i in y-1 downTo 0) {
             if (this[i][x] >= pointValue) {
-                return false to y-i-1
+                return false to y-i
             }
         }
 
@@ -68,7 +68,29 @@ fun main() {
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        val matrix = input.toMatrix()
+        var topScenicScore = 0
+
+        for (line in 1 until matrix.size-1) {
+            for (tree in 1 until matrix.size-1) {
+                var scenicScore = 1
+
+                scenicScore *=
+                    (matrix.getTopVisibility(tree, line).second *
+                        matrix.getRightVisibility(tree, line).second *
+                        matrix.getBottomVisibility(tree, line).second *
+                        matrix.getLeftVisibility(tree, line).second)
+
+                matrix.getTopVisibility(tree, line).second.println()
+                matrix.getLeftVisibility(tree, line).second.println()
+                matrix.getBottomVisibility(tree, line).second.println()
+                matrix.getRightVisibility(tree, line).second.println()
+
+                if (scenicScore > topScenicScore) topScenicScore = scenicScore
+            }
+        }
+
+        return topScenicScore
     }
 
     // test if implementation meets criteria from the description, like:
