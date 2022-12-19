@@ -53,6 +53,7 @@ fun main() {
 
     fun part1(input: List<String>): Int {
         val matrix = input.toMatrix()
+
         var visible = matrix.size*4-4
 
         for (line in 1 until matrix.size-1) {
@@ -81,17 +82,13 @@ fun main() {
                         matrix.getBottomVisibility(tree, line).second *
                         matrix.getLeftVisibility(tree, line).second)
 
-                matrix.getTopVisibility(tree, line).second.println()
-                matrix.getLeftVisibility(tree, line).second.println()
-                matrix.getBottomVisibility(tree, line).second.println()
-                matrix.getRightVisibility(tree, line).second.println()
-
                 if (scenicScore > topScenicScore) topScenicScore = scenicScore
             }
         }
 
         return topScenicScore
     }
+
 
     // test if implementation meets criteria from the description, like:
     val testInput = readInput("Day08_test")
